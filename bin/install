@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+installer() {
+  local install_type=$1
+  local version=$2
+  local install_path=$3
+
+  local tmp_download_dir
+  tmp_download_dir=$(mktemp -d -t spring-boot_XXXXXXX)
+
+  if [ "version" != "${install_type}" ]; then
+    echo "The asdf-spring-boot plugin only supports intalling official"
+    echo "binary releases as built by the Spring Boot team."
+    echo "If you want to install another version from source, see:"
+    echo "https://github.com/spring-projects/spring-boot/"
+    exit 1
+  fi
+
+  if ! which java >/dev/null; then
+    echo "You need a Java Runtime already installed on your computer."
+    echo "You can use asdf-java for this: asdf plugin-add java && asdf list-all java"
+    echo "As an alternative, follow the instructions for your platform"
+    echo "or download it from https://adoptopenjdk.net/"
+    exit 1
+  fi
+
+  # running this in a subshell
+  # we don't want to disturb current working dir
+  (
+    set -e
+
+    local tar_path="$tmp_download_dir/spring-boot-cli-${version}-bin.tar.gz"
+    curl -Lo "$tar_path" "$(download_url "$version")" || fail "could not download spring-boot-cli archive"
+    tar -xf "$tar_path" -C "$install_path" --strip-components=1 || fail "failed to extract spring-boot-cli archive"
+  ) || (rm -rf "$install_path"; exit 1)
+}
+
+download_url() {
+  local version=$1
+  echo "https://repo.spring.io/release/org/springframework/boot/spring-boot-cli/${version}/spring-boot-cli-${version}-bin.tar.gz"
+}
+
+fail() {
+  echo "asdf-spring-boot error: " "$@"
+  exit 1
+}
+
+installer "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
