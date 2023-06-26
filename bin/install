@@ -37,7 +37,7 @@ installer() {
 
 download_url() {
   local version=$1
-  echo "https://repo.spring.io/release/org/springframework/boot/spring-boot-cli/${version}/spring-boot-cli-${version}-bin.tar.gz"
+  echo "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-cli/${version}/spring-boot-cli-${version}-bin.tar.gz"
 }
 
 fail() {

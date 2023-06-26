@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readonly releases_path="https://repo.spring.io/release/org/springframework/boot/spring-boot-cli/"
+readonly releases_path="https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-cli/"
 cmd="curl -Ls $releases_path"
 
 # stolen from https://github.com/rbenv/ruby-build/pull/631/files#diff-fdcfb8a18714b33b07529b7d02b54f1dR942
